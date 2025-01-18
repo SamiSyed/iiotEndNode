@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.10)
 set(CMAKE_TRY_COMPILE_TARGET_TYPE "STATIC_LIBRARY")
 
 # Set project name and target
-project(IOT_GATEWAY C CXX ASM)
+project(IOT_END_NODE C CXX ASM)
 message("CMAKE_PROJECT_NAME: ${CMAKE_PROJECT_NAME}")
 
 get_filename_component(CXX_COMPILER_NAME ${CMAKE_CXX_COMPILER} NAME_WE)
@@ -11,7 +11,7 @@ message("CXX_COMPILER_NAME: ${CXX_COMPILER_NAME}")
 set(CMAKE_C_STANDARD 99)
 set(CMAKE_CXX_STANDARD 17)
 
-set(TARGET IOT_GATEWAY)
+set(TARGET IOT_END_NODE)
 set(MCU_MODEL STM32WLE5xx)
 
 # Specify the build type (debug or release)

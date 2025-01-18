@@ -1,6 +1,6 @@
 [
     {
-        "name": "IOT_GATEWAY",
+        "name": "IOT_END_NODE",
         "toolchainFile": "../target/gcc-arm-none-eabi.cmake"
     },
     {

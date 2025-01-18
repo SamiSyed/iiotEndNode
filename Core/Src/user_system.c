@@ -5,7 +5,6 @@
 #include "tim.h"
 #include "usart.h"
 
-
 static bool rawDataReceived = false;
 static SystemError systemError = NO_ERROR;
 static bool sendingData = false;
@@ -15,12 +14,7 @@ static bool initialized = false;
 static bool lastCommandOK = true;
 uint32_t timeStamp_timer = 0;
 
-static uint16_t newValueBuffer[NUMBER_OF_SENSORS];
-static uint16_t
-    filteredSensorValues[NUMBER_OF_SENSORS]; /* Global Sensor Values*/
-static MovingAverageFilter sensorFilters[NUMBER_OF_SENSORS];
-static uint16_t filterBuffer[NUMBER_OF_SENSORS][FILTER_BUFFER_SIZE];
-static Uart2Status_e uart2Status = UART2_RX_COMPLETE;
+uint8_t loraMessage_TX[LORA_TX_BUFFER_SIZE + 1];
 
 /* GSM variables */
 
@@ -45,44 +39,7 @@ void setSystemError(SystemError error) {
   }
 }
 
-Uart2Status_e getUart2Status(void) { return uart2Status; }
-
-void setUart2Status(Uart2Status_e status) { uart2Status = status; }
-
 SystemError getSystemError(void) { return systemError; }
-
-/* Filter */
-SystemError initSensorFilter(void) {
-  SystemError error = NO_ERROR;
-  /* Create NUMBER_OF_SENSORS amount of filter */
-  for (uint8_t sId = 0; sId < (uint8_t)NUMBER_OF_SENSORS; sId++) {
-    error = MovingAverage_Init(&sensorFilters[sId], &filterBuffer[sId][0],
-                               FILTER_BUFFER_SIZE);
-    if (error != NO_ERROR) {
-      break;
-    }
-  }
-
-  return error;
-}
-
-void runAllFilter(void) {
-  for (uint8_t sId = 0; sId < (uint8_t)NUMBER_OF_SENSORS; sId++) {
-    filteredSensorValues[sId] =
-        runFilter(&sensorFilters[sId], newValueBuffer[sId]);
-  }
-}
-
-void setNewValueBuffer(uint16_t newValue) {
-  for (uint8_t sId = 0; sId < (uint8_t)NUMBER_OF_SENSORS; sId++) {
-    newValueBuffer[sId] = newValue;
-  }
-}
-
-/* Get value from global sensor array*/
-uint16_t getFilteredValueByIndex(uint8_t index) {
-  return filteredSensorValues[index];
-}
 
 
 uint16_t GetTemperatureLevel(void) {
@@ -112,4 +69,22 @@ uint32_t getTick_CustomTimer_Sec(void) {
 
 void initDelayCustomTimer(void) {
   timeStamp_timer = __HAL_TIM_GET_COUNTER(&htim2);
+}
+
+char *prepareLoraMessage(void) {
+  uint8_t dataString[LORA_END_NODE_VALUE_SIZE];
+  uint16_t rawData = GetTemperatureLevel();
+  // uint16_t rawData = SYS_GetBatteryLevel();
+
+  // printf("LORA: Temperature : %i\r\n", temperature);
+  printf("\r\nRaw Data : %i\r\n", rawData);
+
+  itoa(rawData, dataString, 10);
+
+  // snprintf(loraMessage_TX, sizeof(loraMessage_TX), "%s#%s", IOT_GATEWAY_KEY,
+  //          SENSOR_ID);
+  snprintf(loraMessage_TX, sizeof(loraMessage_TX), "%s#%s#%s", IOT_GATEWAY_KEY,
+           SENSOR_ID, dataString);
+  printf("LORA: TX: %s\r\n",loraMessage_TX);
+  return loraMessage_TX;
 }

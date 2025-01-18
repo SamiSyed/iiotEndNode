@@ -9,21 +9,23 @@
 #define UART_RX_BUFFER_SIZE 60U
 #define LORA_LISTENING_DURATION 3000U /* UNIT ms */
 
-
+#define SENSOR_ID_DIGIT 3
 #define IOT_GATEWAY_KEY "0123456789"
 #define IOT_GATEWAY_KEY_SIZE 10U
-#define LORA_MESSAGE_DELIMITER '#'
+#define LORA_MESSAGE_DELIMITER "#"
 #define LORA_MESSAGE_DELIMITER_SIZE 1
 #define IOT_GATEWAY_MESSAGE_SIZE 3U
+#define LORA_END_NODE_VALUE_SIZE 4U
 
-#define MAX_APP_BUFFER_SIZE                                                    \
+#define LORA_RX_BUFFER_SIZE                                                    \
   (IOT_GATEWAY_KEY_SIZE + LORA_MESSAGE_DELIMITER_SIZE +                        \
    IOT_GATEWAY_MESSAGE_SIZE)
+#define LORA_TX_BUFFER_SIZE                                                    \
+  (LORA_RX_BUFFER_SIZE + LORA_MESSAGE_DELIMITER_SIZE + LORA_END_NODE_VALUE_SIZE)
 
-#define SENSOR_ID "101"
+#define SENSOR_ID "102"
 
 #define usb_uart &huart1
-#define gsm_uart &huart2
 
 typedef enum {
   NO_ERROR,
@@ -37,18 +39,6 @@ typedef enum {
   ERROR_SEND_MQTT_FAILED,
 } SystemError;
 
-typedef enum {
-  sensorID_0 =
-      0, /* Should start with 0 to keep the NUMBER_OF_SENSORS accurate */
-  sensorID_1,
-  sensorID_2,
-  sensorID_3,
-  sensorID_4,
-
-  NUMBER_OF_SENSORS /* This should be at last and not changed because it holds
-                       the count of total sensors. which is used in sensor loop
-                       and many other places.*/
-} SensorId;
 typedef enum {
   UART2_WAITING_TX,
   UART2_TX_COMPLETE,
@@ -97,4 +87,5 @@ void Delay_CustomTimer(uint32_t delayMs);
 uint32_t getTick_CustomTimer(void);
 uint32_t getTick_CustomTimer_Sec(void);
 void initDelayCustomTimer(void);
+char *prepareLoraMessage(void);
 #endif /* SYSTEM_H */

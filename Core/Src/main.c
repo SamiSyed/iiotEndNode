@@ -132,10 +132,9 @@ int main(void) {
   dataOkStatus = getTick_CustomTimer_Sec();
   loraRecieveOkStatus = getTick_CustomTimer_Sec();
 
-  printf("\r\n\r\n**********IOT End Node**********\r\n\r\n");
+  printf("\r\n\r\n**********End Node : %s**********\r\n\r\n", SENSOR_ID);
   initUart();
 
-  initSensorFilter();
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -150,8 +149,8 @@ int main(void) {
     /* USER CODE BEGIN 3 */
     listenForLoraNodes(LORA_LISTENING_DURATION);
     
-    printf(" . \r\n");
-    Delay_CustomTimer(3000);
+    // printf(" . \r\n");
+    Delay_CustomTimer(1000);
 
     refreshIwdg();
   }

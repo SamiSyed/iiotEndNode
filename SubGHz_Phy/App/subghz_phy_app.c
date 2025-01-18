@@ -56,11 +56,8 @@
 static RadioEvents_t RadioEvents;
 
 /* USER CODE BEGIN PV */
-static uint8_t BufferTx[MAX_APP_BUFFER_SIZE];
-static uint8_t BufferRx[MAX_APP_BUFFER_SIZE];
-
-uint16_t temperature = 0;
-uint16_t batLevel = 0;
+static uint8_t BufferTx[LORA_TX_BUFFER_SIZE];
+static uint8_t BufferRx[LORA_RX_BUFFER_SIZE];
 
 /* Last  Received Buffer Size*/
 uint16_t RxBufferSize = 0;
@@ -163,11 +160,11 @@ static void OnRxDone(uint8_t *payload, uint16_t size, int16_t rssi,
   // printf("\r\n===> OnRxDone(void)\r\n");
 
   /* Clear BufferRx*/
-  memset(BufferRx, 0, MAX_APP_BUFFER_SIZE);
+  memset(BufferRx, 0, LORA_RX_BUFFER_SIZE);
 
   /* Record payload size*/
-  memcpy(BufferRx, payload, MAX_APP_BUFFER_SIZE);
-  printf("LORA: BufferRx : %s\r\n", BufferRx);
+  memcpy(BufferRx, payload, LORA_RX_BUFFER_SIZE);
+  // printf("\r\nLORA: BufferRx : %s\r\n", BufferRx);
   /* Check buffer */
   if (strstr(BufferRx, IOT_GATEWAY_KEY) != NULL) {
     if (strstr(BufferRx, SENSOR_ID) != NULL) {
@@ -203,14 +200,10 @@ static void OnRxError(void) {
 /* USER CODE BEGIN PrFD */
 void sendDataByLoRa(void) {
   Delay_CustomTimer(Radio.GetWakeupTime() + 200);
-  // temperature = GetTemperatureLevel();
-  batLevel = SYS_GetBatteryLevel();
+  // status = Radio.Send(BufferTx, MAX_APP_BUFFER_SIZE);
+  char *loraMessage_p = prepareLoraMessage();
+  status = Radio.Send(loraMessage_p, LORA_TX_BUFFER_SIZE);
 
-  // printf("LORA: Temperature : %i\r\n", temperature);
-  printf("\r\nBattery Level : %i\r\n", batLevel);
-  BufferTx[0] = batLevel;
-  BufferTx[1] = batLevel >> 8;
-  status = Radio.Send(BufferTx, MAX_APP_BUFFER_SIZE);
   // printf("LORA: Radio.Tx() : %i\r\n", status);
 }
 
