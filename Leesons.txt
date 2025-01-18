@@ -1,0 +1,24 @@
+When cannot connect with stLink
+- Error message says connect with Debug authentication
+
+Solution
+
+- Set Mode -> Hot Plug
+- Reset Mode -> Core Reset (May be not needed. Once worked without setting this)
+
+Step 1. Hold Reset button and connect with stLink
+Step 2. Click Full Chip Erase
+Step 3. When Confirmation window come Click OK
+Step 4. Just after Click OK release Reset button of the board. It will fail to ERASE
+Step 5. Go to option byte (OB) menu in the stlink.
+Step 6. Select AA in READ OUT PROTECTION (Now all the operation should work)
+Step 7. Click Full Chip Erase again and it should be able to Erase.
+
+Repair the firmware which was causing the core to lock.
+
+
+Problem : Above problem getting locked and cannot connect to the MCU
+
+Cause : Setting all pins to Analog in CubeMX so it will be power efficient. 
+        But that is not happening here because it is resetting one PIN which 
+        is needed for Connecting StLink in normal mode.

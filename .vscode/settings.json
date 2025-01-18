@@ -1,0 +1,14 @@
+{
+    "cSpell.words": [
+        "huart"
+    ],
+    "files.associations": {
+        "uartringbuffer_multi.h": "c",
+        "cstdio": "c",
+        "uartringbufdma.h": "c",
+        "stm32wlxx_it.h": "c",
+        "user_system.h": "c",
+        "user_mqttfunctions.h": "c",
+        "tim.h": "c"
+    }
+}

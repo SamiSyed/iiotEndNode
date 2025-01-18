@@ -1,0 +1,13 @@
+[
+    {
+        "name": "IOT_GATEWAY",
+        "toolchainFile": "../target/gcc-arm-none-eabi.cmake"
+    },
+    {
+        "name": "Mono Unit Tests",
+        "compilers": {
+            "CXX": "g++",
+            "C": "gcc"
+        }
+    }
+]

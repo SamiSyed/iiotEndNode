@@ -1,0 +1,162 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "build",
+            "type": "shell",
+            "command": "cmake --build ./build --target IOT_GATEWAY -j 10",
+            "problemMatcher": {
+                "owner": "cpp",
+                "fileLocation": [
+                    "relative",
+                    "${workspaceFolder}"
+                ],
+                "pattern": {
+                    "regexp": "^(.*):(\\d+):(\\d+):\\s+(warning|error):\\s+(.*)$",
+                    "file": 1,
+                    "line": 2,
+                    "column": 3,
+                    "severity": 4,
+                    "message": 5
+                }
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "make flash",
+            "type": "shell",
+            "dependsOn": [
+                "build"
+            ],
+            "command": [
+                "openocd -f interface/stlink-v2.cfg -f target/stm32wlx.cfg -c \"program \"build/IOT_GATEWAY.bin\" verify reset exit 0x08000000\" -c shutdown"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}",
+                "shell": {
+                    "executable": "cmd.exe",
+                    "args": [
+                        "/d",
+                        "/c"
+                    ]
+                }
+            },
+            "problemMatcher": {
+                "owner": "cpp",
+                "fileLocation": [
+                    "relative",
+                    "${workspaceFolder}"
+                ],
+                "pattern": {
+                    "regexp": "^(.*):(\\d+):(\\d+):\\s+(warning|error):\\s+(.*)$",
+                    "file": 1,
+                    "line": 2,
+                    "column": 3,
+                    "severity": 4,
+                    "message": 5
+                }
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "Terminate All Tasks",
+            "command": "echo ${input:terminate}",
+            "type": "shell",
+            "problemMatcher": [],
+        },
+    ],
+    "inputs": [
+        {
+            "id": "terminate",
+            "type": "command",
+            "command": "workbench.action.tasks.terminate",
+            "args": "terminateAll",
+        },
+        {
+            "id": "LOG_FUNCTION_NAMES",
+            "type": "pickString",
+            "description": "Select if you want to log all function names executed",
+            "options": [
+                "true",
+                "false"
+            ],
+            "default": "false",
+        },
+        {
+            "id": "LOG_ALL_PERIPHERAL_ACCESS",
+            "type": "pickString",
+            "description": "Select if you want to log all peripheral accesses",
+            "options": [
+                "true",
+                "false"
+            ],
+            "default": "false",
+        },
+        {
+            "id": "LOG_LEVEL",
+            "type": "pickString",
+            "description": "Select logging level(-1: NOISY, 0: DEBUG, 1: INFO, 2: WARNING, 3: ERROR)",
+            "options": [
+                "-1",
+                "0",
+                "1",
+                "2",
+                "3"
+            ],
+            "default": "2",
+        },
+        {
+            "id": "TEST_NAME",
+            "type": "pickString",
+            "description": "Select Test Case To Run",
+            "options": [
+                "SF_ID 1 While Cart Power Connected Should Raise Error",
+                "SF_ID 1 While Cart Power Connected Normal Condition Should Not Raise Error",
+                "SF_ID 0 While Cart Power Connected Should Raise Error",
+                "SF_ID 0 While Cart Power Connected Normal Condition Should Not Raise Error",
+                "SF_ID 1 While Power Cutoff Should Raise Error",
+                "SF_ID 1 While Power Cutoff Should Not Raise Error For Case 2",
+                "SF_ID 1 While Power Cutoff Should Not Raise Error For Case 1",
+                "SF_ID 0 While Power Cutoff Should Raise Error",
+                "SF_ID 0 While Power Cutoff Should Not Raise Error For Case 2",
+                "SF_ID 0 While Power Cutoff Should Not Raise Error For Case 1",
+                "MidMon Is 50% Of SFMon Should But LoadMon GT 100 Raise ADC Error For SF_ID 0",
+                "SfOut Is Low And MidMon Not 50% Of SFMon Should Raise ADC Error For SF_ID 0",
+                "SfOut Is Low And MidMon Not 50% Of SFMon Should Raise ADC Error",
+                "SfOut Is High And MidMon Not Equals To LoadMon Should Raise ADC Error",
+                "SfOut Is High And MidMon Not Equals To SfMon Should Raise ADC Error",
+                "ADC Freerun Without Error",
+                "Releasing Ext_ESTOP Should Flip Hatch_Out Bit In CM Message",
+                "Pressing Ext_ESTOP Should Flip Hatch_Out Bit In CM Message",
+                "Releasing Ext_ESTOP Should Flip Ext_ESTOP Bit In CM Message",
+                "Pressing Ext_ESTOP Should Flip Ext_ESTOP Bit In CM Message",
+                "Releasing Ext_Estop Should Connect Hatch Motor Power",
+                "Pressing Ext_Estop Should Disconnect Hatch Motor Power",
+                "Releasing Ext_Estop Should Connect Cart Motor Power",
+                "Pressing Ext_Estop Should Disconnect Cart Motor Power",
+                "Pressing ESTOP And Releasing Should Change Mode Back To Connecting",
+                "Pressing ESTOP Should Change Mode To Disconnecting",
+                "Releasing ESTOP Should Flip OUTPUT_HATCH Bit In CM Message",
+                "Pressing ESTOP Should Flip OUTPUT_HATCH Bit In CM Message",
+                "Releasing ESTOP Should Flip OUTPUT Bit In CM Message",
+                "Pressing ESTOP Should Flip OUTPUT Bit In CM Message",
+                "Releasing ESTOP Should Flip ESTOP Bit In CM Message",
+                "Releasing ESTOP Should Connect Cart Motor Power",
+                "Pressing ESTOP Should Flip ESTOP Bit In CM Message",
+                "Pressing ESTOP Should Disconnect Cart Motor Power",
+                "Check Error Trigger In Both CPUS",
+                "Check Hwrev Err Has Triggered Other SFCPU To Disconnect",
+                "Hwrev Err Check In Cross Monitor Message",
+                "Free Run With Error",
+                "Free Run With No Error"
+            ],
+            "default": "SF_ID 1 While Cart Power Connected Should Raise Error",
+        },
+    ],
+}

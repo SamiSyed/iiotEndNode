@@ -1,0 +1,4 @@
+1. Enable 5 sensors -> Update values based on received data. Not to run all filter.
+2. Open and close connection when sending data.
+3. Multiplexing LoRa receive
+4. Check on Topic and Data before sending it. (Should not send on blank topic)

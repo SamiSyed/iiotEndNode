@@ -1,0 +1,26 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+
+        {
+            "name": "ST-Link (openocd)",
+            "type": "cortex-debug",
+            // "request": "launch",
+            "request": "attach",
+            "servertype": "openocd",
+            "device": "STM32WLE5JC",
+            "interface": "swd",
+            "runToEntryPoint": "main",
+            "cwd": "${workspaceFolder}",
+            "executable": "${command:cmake.launchTargetPath}",
+            "preLaunchTask": "build",
+            "configFiles": [
+                "interface/stlink.cfg",
+                "target/stm32WLx.cfg"
+            ],
+        },
+    ]
+}
